@@ -14,15 +14,15 @@ Generated: 08/26/2022 00:29:15
 * Get local env information
 
 ```
-julian@cockroachlabs.com
+julian@domain.com
 
 julian
 
-jlevi-crdb-onboard1
+jlevi-crdb-1
 
-us-west1-a
+us-east1-b
 
-us-west1
+us-east1
 
 ```
 
