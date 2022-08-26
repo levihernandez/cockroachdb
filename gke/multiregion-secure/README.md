@@ -1,6 +1,7 @@
 # GCP - GKE Multiregion CRDB Secured Cluster
 
 * The Ruby script execution:
+  * Uses the `config.yaml` file to populate the scripts, YAML, and Markdown files.
   * Downloads the CRDB Config scripts
   * Creates the Load Balancer & SSD Storage Manifest files
   * Configures the StatefulSet YAML (manual adjustment needed)
