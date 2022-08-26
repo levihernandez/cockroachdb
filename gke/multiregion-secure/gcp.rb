@@ -65,7 +65,8 @@ ycsbreplica = ymlcnf["ycsb"]["multiregion"]["replicas"]
 
 
 ## Runbook Template File
-tmpl = "crdb-multiregion-runbook.md"
+filetmpl = "crdb-multiregion-runbook"
+tmpl = "#{filetmpl}.md"
 
 ## Functions that prep data for the gcloud/kubectl commands and other prep work
 def download_mr_files(mrdowndir, mrdir)
@@ -595,3 +596,10 @@ ALTER PARTITION p9 OF TABLE ycsb.public.usertable  CONFIGURE ZONE USING num_repl
 "
 f.write(data)
 f.close
+
+# pandoc -s -f markdown -t html5 -o crdb-multiregion-runbook.html crdb-multiregion-runbook.md -c style.css
+# pandoc crdb-multiregion-runbook.md -o crdb-multiregion-runbook.html --template template.html --standalone --mathjax --toc --toc-depth 2
+#md2html = `pandoc -s -f markdown -t html5 -o #{filetmpl}.html #{filetmpl}.md -c style.css`
+md2html = `pandoc #{filetmpl}.md -o #{filetmpl}.html --template template.html --standalone --mathjax --toc --toc-depth 2 --metadata title="CRDB Deployment Runbook"`
+puts "pandoc must be installed: npm install pandoc"
+puts "HTML file is being generated #{md2html}"
