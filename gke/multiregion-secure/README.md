@@ -10,4 +10,4 @@
   * Creates a Markdown file with the flow of the commands as a runbook
 * Execute script:
   * `ruby prep-yaml.rb; ruby gcp.rb`
-  * [Sample Markdown Runbook](sample_runbook.md)
+  * [Sample Markdown Runbook](gcp-sample-runbook.md)
