@@ -47,6 +47,7 @@ k8sazs = ymlcnf["cloud"]["compute"]
 k8snamespace = ymlcnf["cloud"]["namespace"]
 k8svmtype = ymlcnf["cloud"]["vmtype"]
 ipsrcranges = ymlcnf["cloud"]["vpcipsrcrange"]
+vpcfirewall = ymlcnf["cloud"]["firewall"]
 
 nodereplica = ymlcnf["cloud"]["replicas"]
 nodecount = ymlcnf["cloud"]["nodes"]
@@ -115,7 +116,10 @@ def build_commands(cmds, data)
             cmd = "kubectl create -f cockroachdb-lb.yaml"
         when "create-compute-firewall"
             ## command fw -
-            cmd = "gcloud compute firewall-rules create allow-cockroach-internal --allow=tcp:#{data[:crdbportdb]} --source-ranges=#{data[:ipsrcranges]}"    
+            cmd = "gcloud compute firewall-rules create #{data[:firewall]} --allow=tcp:#{data[:crdbportdb]} --source-ranges=#{data[:ipsrcranges]}"  
+        when "delete-compute-firewall"
+            ## command delfw -  
+            cmd = "gcloud compute firewall-rules delete #{data[:firewall]}"
         when "create-ssd-storage"
             ## command ssd
             cmd = "kubectl create -f storage-class-ssd.yaml --context #{data[:context]}"
@@ -201,7 +205,13 @@ cmdsfw = "create-compute-firewall"
 datafw = {}
 datafw.merge!("crdbportdb": crdbportdb)
 datafw.merge!("ipsrcranges": ipsrcranges)
+datafw.merge!("firewall": vpcfirewall)
 phfw = build_commands(cmdsfw, datafw)
+
+cmdsdelfw = "delete-compute-firewall"
+datadelfw = {}
+datadelfw.merge!("firewall": vpcfirewall)
+phdelfw = build_commands(cmdsdelfw, datadelfw)
 
 
 
@@ -324,12 +334,12 @@ k8sazs.each_with_index do |k, i|
     cmssdel = build_commands(cmdelssd, datasdelssd)
     phdelssd.merge!("ssd-clstr#{i}-#{x}": cmssdel)
 
-    cmdelclstr = "delete-ssd-storage"
+    cmdelclstr = "delete-clusters"
     datadelclstr = {}
     datadelclstr.merge!("clusternum": i )
-    datadelclstr.merge!("context": contextid)
+    datadelclstr.merge!("region": crdbregion)
     cmdelclst = build_commands(cmdelclstr, datadelclstr)
-    phdelclstr.merge!("ssd-clstr#{i}-#{x}": cmdelclst)
+    phdelclstr.merge!("del-clstr#{i}-#{x}": cmdelclst)
 
     cmdsdba = "create-db-admin"
     datadba = {}
@@ -418,6 +428,11 @@ overwrite_markdown(tmpl, data, pattern)
 # Create the Firewall
 pattern = "{{ gce-firewall }}"
 data = {"gce-firewall": phfw}
+overwrite_markdown(tmpl, data, pattern)
+
+# Delete the Firewall
+pattern = "{{ gce-delete-firewall }}"
+data = {"firewall": phdelfw}
 overwrite_markdown(tmpl, data, pattern)
 
 # Create the LB for K8s
@@ -605,3 +620,14 @@ f.close
 md2html = `pandoc #{filetmpl}.md -o #{filetmpl}.html --template template.html --standalone --mathjax --toc --toc-depth 2 --metadata title="CRDB Deployment Runbook"`
 puts "pandoc must be installed: brew install pandoc"
 puts "HTML file is being generated #{md2html}"
+
+## setup.py needs python2.x and mac no longer installs it, fix print statements manually
+## Fix: 
+# print("Waiting for DNS load balancer IP in {zone}...")
+# print("DNS endpoint for zone {zone}: {external_ip}'")
+# print('Sleeping 30 seconds before attempting to initialize cluster to give time for volumes to be created and pods started.')
+
+
+## Appendix
+# Error: 
+# Fix: kubectl delete csr <name>
