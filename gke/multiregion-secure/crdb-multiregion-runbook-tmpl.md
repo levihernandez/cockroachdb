@@ -57,9 +57,12 @@ Generated: {{ timestamp }}
 
 ```yaml
         resources:
-        requests:
-            memory: 26Gi
-            cpu: 7
+          requests:
+            cpu: "3500m"
+            memory: "12300Mi"
+          limits:
+            cpu: "3500m"
+            memory: "12300Mi"
 ```
 
 
@@ -152,6 +155,12 @@ Generated: {{ timestamp }}
 
 ```
 {{ delete-k8s-cluster }}
+```
+
+* Delete GPC VPC Firewall
+
+```
+{{ gce-delete-firewall }}
 ```
 
 * Prepare the data for YCSB workloads
