@@ -66,6 +66,7 @@ end
 
 # Create the Markdown copy
 FileUtils.cp_r "#{tmpl}", "#{runb}"
+FileUtils.cp_r "#{mrdowndir}/.", "#{mrdir}/"
 
 def overwrite_markdown(tmpl, data, pattern)
     text = [] 
@@ -117,15 +118,19 @@ YAML.load_stream(File.read("#{mrdowndir}/cockroachdb-statefulset-secure.yaml")) 
     File.open("#{tmpdir}/cockroachdb-statefulset-secure_#{kind}-#{meta}.yaml", 'w') {|f| f.write document.to_yaml } 
 end
 
+# Remove special char in StatefulSet config
+
 # Merge ALL temp YAML files into a single YAML file
-File.truncate("#{mrdir}/cockroachdb-statefulset-secure.yaml", 0)
+ssfile = "./#{mrdir}/cockroachdb-statefulset-secure.yaml"
+File.truncate(ssfile, 0)
+f = File.open(ssfile, 'a')
 for y in yamls
-    # File.write('some-file.txt', 'here is some text', File.size('some-file.txt'), mode: 'a')
-    f = File.open("#{mrdir}/cockroachdb-statefulset-secure.yaml", 'a')
-    r = File.read(y)
-    f.write(r)
-    f.close
+  puts "merging #{y}"
+  # File.write('some-file.txt', 'here is some text', File.size('some-file.txt'), mode: 'a')
+  r = File.read(y)
+  f.write(r)  
 end
+f.close
 
 # Clean up the tmp dir containing the temp config yaml files
 FileUtils.rm_rf(tmpdir)
