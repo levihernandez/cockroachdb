@@ -8,7 +8,6 @@ require 'fileutils'
 The following script is writen to facilitate a markdown runbook for a quick deployment
 of K8s secure in a multi-region setup in GCP.
 
-
 - Read config yaml
 - Download CRDB Config Setup Files
 - prebuild gconsole commands to deploy
@@ -346,6 +345,13 @@ k8sazs.each_with_index do |k, i|
 
 end
 
+def overwrite_pyfiles(pyfile, pattern, data)
+    original = File.read(pyfile)
+    changes = original.gsub(pattern, data)
+    File.open(pyfile, "w") {|file| file.puts changes }
+    puts pattern
+end
+
 def overwrite_markdown(tmpl, data, pattern)
     text = [] 
     data.map{|key, value| text.append("#{value}\n\n")}
@@ -357,6 +363,22 @@ def overwrite_markdown(tmpl, data, pattern)
     #puts output
 end
 
+
+## Update the Python files setup.y & teardown.py
+pattern = /^contexts.*\n\}/
+data = "contexts = #{JSON.pretty_generate(json_cntx)}"
+pyfile = "#{mrdir}/setup.py"
+overwrite_pyfiles(pyfile, pattern, data)
+
+pattern = /^regions.*\n\}/
+data = "regions = #{JSON.pretty_generate(json_regs)}"
+pyfile = "./#{mrdir}/setup.py"
+overwrite_pyfiles(pyfile, pattern, data)
+
+pattern = /^contexts.*\n.*\n.*\n.*\n}/
+data = "contexts = #{JSON.pretty_generate(json_cntx)}"
+pyfile = "./#{mrdir}/teardown.py"
+overwrite_pyfiles(pyfile, pattern, data)
 
 ## Populate template file, back it up first, the following looks for double curly brackets vars to replace
 
