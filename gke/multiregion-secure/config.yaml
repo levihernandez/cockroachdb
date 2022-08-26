@@ -12,6 +12,7 @@ cloud:
   namespace: default
   secure: true
   vpcipsrcrange: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+  firewall: allow-cockroach-internal
   compute:
     - zone: east
       region: us-east4
@@ -38,10 +39,23 @@ cloud:
         - northamerica-northeast1-a
 
 crdb:
-  enterpricelicense: crl-0-<request-license>
-  orgid: "jlevi-k8s-demo"
+  enterpricelicense: crl-0-<request-enterprise-license>
+  licenseexpire: 2022-10-30 00:00:00 -0400 EDT
+  licencetype: Evaluation
+  orgid: "JLevi Demo Org"
   uiuser: roach
   uipass: <create-password>
   uiport: 8080
   dbport: 26257
- 
+
+ycsb:
+  multiregion: 
+    key: USER1000000000000000
+    insertorder: "ordered"
+    replicas: 3
+    insertcount: 50000
+    insertstart:
+    - us-east4: 1000000000000000
+    - us-east5: 2000000000000000
+    - northamerica-northeast1: 3000000000000000
+  
