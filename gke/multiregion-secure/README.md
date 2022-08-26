@@ -1,5 +1,6 @@
 # GCP - GKE Multiregion CRDB Secured Cluster
 
+* Requirements: `brew install pandoc`
 * The Ruby script execution:
   * Uses the `config.yaml` file to populate the scripts, YAML, and Markdown files.
   * Downloads the CRDB Config scripts
