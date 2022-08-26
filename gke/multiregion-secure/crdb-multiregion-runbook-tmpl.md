@@ -52,19 +52,14 @@ Generated: {{ timestamp }}
 ### Manual Verification of `setup.py`, `teardown.py`, `cockroachdb-statefulset-secure.yaml`
 
 * Correct the `cockroachdb-statefulset-secure.yaml` file
-    * Remove `|-` from the property `spec.template.spec.containers.0.resources`
-
-
-
-    * It must look like the generated example below:
+    * Review the property `spec.template.spec.containers.0.resources.requests` cpu & memory 
+    * The syntax must look like the example below:
 
 ```yaml
         resources:
         requests:
             memory: 26Gi
             cpu: 7
-
-
 ```
 
 
