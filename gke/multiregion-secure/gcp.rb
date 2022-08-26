@@ -353,8 +353,8 @@ def overwrite_markdown(tmpl, data, pattern)
     original = File.read(tmpl)
     changes = original.gsub(pattern, output)
     File.open(tmpl, "w") {|file| file.puts changes }
-    puts "-----------------"
-    puts output
+    #puts "-----------------"
+    #puts output
 end
 
 
