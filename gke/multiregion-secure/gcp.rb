@@ -228,7 +228,7 @@ json_regs = {}
 k8sazs.each_with_index do |k, i|
     i += 1
     crdbregion = k["region"]
-    crdbzone = ""
+    crdbzones = k["az"].join(',')
     contextid = "gke_#{project}_#{crdbregion}_cockroachdb#{i}"
     vpccidrip = k["cidrip"]
     puts "\n\nCRDB K8s Cluster#{i} <Context#{i}>:  #{contextid}\n\n"
@@ -237,14 +237,15 @@ k8sazs.each_with_index do |k, i|
     cmds1 = "container-clusters-create"
     data1 = {}
     data1.merge!("region": crdbregion)
-    data1.merge!("azs": allazs)
+    data1.merge!("azs": allazs) 
     data1.merge!("vmtype": k8svmtype)
     data1.merge!("cidrip": vpccidrip)
-    data1.merge!("csvzones": allazcsv)
+    data1.merge!("csvzones": crdbzones) # Get zones related to the region only
     data1.merge!("nodecount": nodecount)
     data1.merge!("clusternum": i )
     cm1 = build_commands(cmds1, data1)
     ph1.merge!("create-clstr#{i}": cm1)
+
 
     cmds2 ="get-pods-context"
     data2 = {}
