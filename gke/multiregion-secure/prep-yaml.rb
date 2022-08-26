@@ -106,7 +106,7 @@ YAML.load_stream(File.read("#{mrdowndir}/cockroachdb-statefulset-secure.yaml")) 
         data = {"change":ymsample }
         overwrite_markdown(tmpl, data, pattern)
 
-        document["spec"]["template"]["spec"]["containers"][0]["resources"] = "requests:\n    memory: #{nodespecmem}\n    cpu: #{nodespeccpu}"
+        document["spec"]["template"]["spec"]["containers"][0]["resources"] = "requests:\n    memory: #{nodespecmem}\n    cpu: #{nodespeccpu}\nlimits:\n    memory: #{nodespecmem}\n    cpu: #{nodespeccpu}"
         document["spec"]["volumeClaimTemplates"][0]["spec"]["storageClassName"] = storagetype
         document["spec"]["volumeClaimTemplates"][0]["spec"]["resources"]["requests"]["storage"] = storage
 
