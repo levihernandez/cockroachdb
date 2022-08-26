@@ -82,14 +82,15 @@ Dir.mkdir(mrdowndir) unless File.exists?(mrdowndir)
 if Dir.empty?(mrdowndir)
     puts "Downloading CRDB Config Setup Files...\n\n"
     download_mr_files(mrdowndir, mrdir)
+    
 else
     puts "CRDB Config Setup Files already downloaded...\n\n"
 end
 
 ## Current dir: File.basename(Dir.getwd)
 ## Copy contents from downloaded to the final version dir
-puts "Copying downloaded CRDB Config Setup Files to #{mrdir} dir... overwriting files now!\n\n"
-FileUtils.cp_r "#{mrdowndir}/.", "#{mrdir}/"
+#puts "Copying downloaded CRDB Config Setup Files to #{mrdir} dir... overwriting files now!\n\n"
+#FileUtils.cp_r "#{mrdowndir}/.", "#{mrdir}/"
 
 def get_all_azs(k8sazs)
     # Get an array of only the AZ for each region
@@ -349,7 +350,6 @@ def overwrite_pyfiles(pyfile, pattern, data)
     original = File.read(pyfile)
     changes = original.gsub(pattern, data)
     File.open(pyfile, "w") {|file| file.puts changes }
-    puts pattern
 end
 
 def overwrite_markdown(tmpl, data, pattern)
@@ -367,7 +367,7 @@ end
 ## Update the Python files setup.y & teardown.py
 pattern = /^contexts.*\n\}/
 data = "contexts = #{JSON.pretty_generate(json_cntx)}"
-pyfile = "#{mrdir}/setup.py"
+pyfile = "./#{mrdir}/setup.py"
 overwrite_pyfiles(pyfile, pattern, data)
 
 pattern = /^regions.*\n\}/
@@ -379,6 +379,12 @@ pattern = /^contexts.*\n.*\n.*\n.*\n}/
 data = "contexts = #{JSON.pretty_generate(json_cntx)}"
 pyfile = "./#{mrdir}/teardown.py"
 overwrite_pyfiles(pyfile, pattern, data)
+
+
+pattern = /resources\: \|\-/
+data = "resources: "
+yfile = "./#{mrdir}/cockroachdb-statefulset-secure.yaml"
+overwrite_pyfiles(yfile, pattern, data)
 
 ## Populate template file, back it up first, the following looks for double curly brackets vars to replace
 
