@@ -45,7 +45,7 @@ k8snumnodes = ymlcnf["cloud"]["node"]
 k8sazs = ymlcnf["cloud"]["compute"]
 # k8sregions = ymlcnf["cloud"]
 k8snamespace = ymlcnf["cloud"]["namespace"]
-k8svmtype = ymlcnf["cloud"]["vm-type"]
+k8svmtype = ymlcnf["cloud"]["vmtype"]
 ipsrcranges = ymlcnf["cloud"]["vpcipsrcrange"]
 
 nodereplica = ymlcnf["cloud"]["replicas"]
@@ -124,8 +124,9 @@ def build_commands(cmds, data)
             cmd = "python setup.py"
         when "container-clusters-create"
             ## command 1 - done
-            cmd = "gcloud container clusters create 
-cockroachdb#{data[:clusternum]} --region=#{data[:region]} --machine-type=#{data[:vmtype]} --num-nodes=#{data[:nodecount]} --cluster-ipv4-cidr=#{data[:cidrip]} --node-locations=#{data[:csvzones]}"
+            cmd = "gcloud container clusters create cockroachdb#{data[:clusternum]} --region=#{data[:region]} --machine-type=#{data[:vmtype]} --num-nodes=#{data[:nodecount]} --cluster-ipv4-cidr=#{data[:cidrip]} --node-locations=#{data[:csvzones]}"
+            puts "VM Type"
+            puts data[:vmtype]
         when "config-context"
             ## command 2 - done
             cmd = "kubectl config get-contexts"
@@ -601,5 +602,5 @@ f.close
 # pandoc crdb-multiregion-runbook.md -o crdb-multiregion-runbook.html --template template.html --standalone --mathjax --toc --toc-depth 2
 #md2html = `pandoc -s -f markdown -t html5 -o #{filetmpl}.html #{filetmpl}.md -c style.css`
 md2html = `pandoc #{filetmpl}.md -o #{filetmpl}.html --template template.html --standalone --mathjax --toc --toc-depth 2 --metadata title="CRDB Deployment Runbook"`
-puts "pandoc must be installed: npm install pandoc"
+puts "pandoc must be installed: brew install pandoc"
 puts "HTML file is being generated #{md2html}"
