@@ -48,14 +48,11 @@ kubectl create -f cockroachdb-lb.yaml
 * Create the Kubernetes clusters:
 
 ```
-gcloud container clusters create 
-cockroachdb1 --region=us-east4 --machine-type= --num-nodes=3 --cluster-ipv4-cidr=10.1.0.0/16 --node-locations=us-east4-a,us-east5-a,northamerica-northeast1-a
+gcloud container clusters create cockroachdb1 --region=us-east4 --machine-type=n2-standard-8 --num-nodes=3 --cluster-ipv4-cidr=10.1.0.0/16 --node-locations=us-east4-a,us-east5-a,northamerica-northeast1-a
 
-gcloud container clusters create 
-cockroachdb2 --region=us-east5 --machine-type= --num-nodes=3 --cluster-ipv4-cidr=10.2.0.0/16 --node-locations=us-east4-a,us-east5-a,northamerica-northeast1-a
+gcloud container clusters create cockroachdb2 --region=us-east5 --machine-type=n2-standard-8 --num-nodes=3 --cluster-ipv4-cidr=10.2.0.0/16 --node-locations=us-east4-a,us-east5-a,northamerica-northeast1-a
 
-gcloud container clusters create 
-cockroachdb3 --region=northamerica-northeast1 --machine-type= --num-nodes=3 --cluster-ipv4-cidr=10.3.0.0/16 --node-locations=us-east4-a,us-east5-a,northamerica-northeast1-a
+gcloud container clusters create cockroachdb3 --region=northamerica-northeast1 --machine-type=n2-standard-8 --num-nodes=3 --cluster-ipv4-cidr=10.3.0.0/16 --node-locations=us-east4-a,us-east5-a,northamerica-northeast1-a
 
 
 ```
