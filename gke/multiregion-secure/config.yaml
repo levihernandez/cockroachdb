@@ -1,0 +1,47 @@
+cloud:
+  cloud: gcp
+  vmtype: n2-standard-8
+  nodememory: 32GB
+  nodevcpus: 8
+  nodes: 3
+  replicas: 3
+  noderesourcescpu: 7
+  noderesourcesmem: 26Gi
+  storage: 1200Gi
+  storagetype: storage-class-ssd
+  namespace: default
+  secure: true
+  vpcipsrcrange: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+  compute:
+    - zone: east
+      region: us-east4
+      cluster: cockroachdb1
+      location: virginia
+      cidrip: 10.1.0.0/16
+      az:
+        - us-east4-a
+
+    - zone: east
+      region: us-east5
+      cluster: cockroachdb2
+      location: ohio
+      cidrip: 10.2.0.0/16
+      az:
+        - us-east5-a
+
+    - zone: northeast
+      region: northamerica-northeast1
+      cluster: cockroachdb3
+      location: montreal
+      cidrip: 10.3.0.0/16
+      az:
+        - northamerica-northeast1-a
+
+crdb:
+  enterpricelicense: crl-0-<request-license>
+  orgid: "jlevi-k8s-demo"
+  uiuser: roach
+  uipass: <create-password>
+  uiport: 8080
+  dbport: 26257
+ 
