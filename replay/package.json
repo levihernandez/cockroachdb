@@ -1,0 +1,21 @@
+{
+    "name": "crdb-setup-replay",
+    "version": "1.0.0",
+    "description": "Replay setup sessions",
+    "author": "Julian Levi Hernandez <julian@cockroachlabs.com>",
+    "license": "MIT",
+    "main": "app.js",
+    "scripts": {
+      "start": "node -L app.js",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+      "nodejs",
+      "bootstrap",
+      "express"
+    ],
+    "dependencies": {
+      "express": "^4.16.4",
+      "asciinema-player":"3.0.1"
+    }
+  }
