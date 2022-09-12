@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    image: levihernandez/asciinema_player
+    container_name: asciinema_container
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./casts/:/home/node/app/casts/
+      - ./views/:/home/node/app/views/
