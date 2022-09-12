@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Demo Replay</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="/asciinema-player.css" />
+   </head>
+   <style>
+      pre {
+         font-size: 10px;
+      }
+   </style>
+   <body>
+      <nav class="navbar navbar-inverse navbar-static-top">
+         <div class="container">
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               </button>
+               <a class="navbar-brand" href="#">CockroachDB - Replay</a>
+            </div>
+         </div>
+      </nav>
+      <div class="jumbotron">
+         <div class="container">
+
+            <p>CockroachDB - Docker Cluster Insecure</p>
+            <script src="/asciinema-player.min.js"></script>
+            Steps from <a href="https://www.cockroachlabs.com/docs/v22.1/start-a-local-cluster-in-docker-mac.html"> Start a Local Cluster in Docker Mac - Insecure</a>
+            
+            <div id="step1"></div>
+
+
+
+            <script>
+                AsciinemaPlayer.create('/crdb-insecure-docker.cast', document.getElementById('step1'),{
+                  loop: false,
+                  columns: 10,
+                  preload: true
+                });
+
+            </script>
+         <pre>
+            asciinema rec crdb-insecure-docker.cast -i 2
+            PS1='demo %% '
+            docker network create -d bridge roachnet
+            docker volume create roach1
+            docker volume create roach2
+            docker volume create roach3
+            
+            docker run -d --name=roach1 --hostname=roach1 --net=roachnet -p 26257:26257 -p 8080:8080  -v "roach1:/cockroach/cockroach-data"  cockroachdb/cockroach:latest start --insecure --join=roach1,roach2,roach3
+            docker run -d --name=roach2 --hostname=roach2 --net=roachnet -v "roach2:/cockroach/cockroach-data" cockroachdb/cockroach:latest start --insecure --join=roach1,roach2,roach3
+            docker run -d --name=roach3 --hostname=roach3 --net=roachnet -v "roach3:/cockroach/cockroach-data" cockroachdb/cockroach:latest start --insecure --join=roach1,roach2,roach3
+            
+            docker ps --filter "ancestor=cockroachdb/cockroach"
+            
+            docker exec -it roach1 ./cockroach init --insecure
+            docker exec -it roach1 grep 'node starting' cockroach-data/logs/cockroach.log -A 11
+            docker exec -it roach1 ./cockroach sql --insecure
+            CREATE DATABASE bank;
+            CREATE TABLE bank.accounts (id INT PRIMARY KEY, balance DECIMAL);
+            INSERT INTO bank.accounts VALUES (1, 1000.50);
+            SELECT * FROM bank.accounts;
+            \q
+            docker exec -it roach2 ./cockroach sql --insecure
+            SELECT * FROM bank.accounts;
+            \q
+            docker exec -it roach1 ./cockroach workload init movr 'postgresql://root@roach1:26257?sslmode=disable'
+            docker exec -it roach1 ./cockroach workload run movr --duration=1m 'postgresql://root@roach1:26257?sslmode=disable'
+            open http://localhost:8080/
+            docker stop roach1 roach2 roach3
+            docker rm roach1 roach2 roach3
+            docker volume rm roach1 roach2 roach3
+            docker network rm roachnet
+            docker ps --filter "ancestor=cockroachdb/cockroach"
+            docker images --format "table {{.ID}}\t {{.Repository}}" | grep cockroach
+            docker images cockroachdb/cockroach
+         </pre>
+         </div>
+      </div>
+      <div class="container">
+         <div class="row">
+            <div class="col-md-6">
+               <h3></h3>
+               <p></p>
+            </div>
+            <div class="col-md-6">
+               <h3></h3>
+               <p></p>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>
