@@ -1,4 +1,5 @@
 # Changefeed to Kafka
+[!Changefeed Streaming to Kafka](changefeed.png)
 
 ## Setup the Infrastructure with Docker Compose Insecure Mode
 
