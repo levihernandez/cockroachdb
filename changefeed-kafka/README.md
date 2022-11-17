@@ -1,5 +1,16 @@
 # Changefeed to Kafka
 
+## Setup the Infrastructure with Docker Compose Insecure Mode
+
+I am running everything in an on-prem server with 32GiB Mem & 24 vCPUs. The exercise should run in an 4vCPU, 8GiB Mem machine.
+
+* Start the cluster: `sudo docker compose up -d`
+* CockroachDB SQL URL: `cockroach sql --insecure --url "postgres://root@192.168.86.62:26257/defaultdb?sslmode=disable"`
+* CockroachDB UI Console: `http://192.168.86.62:8080`
+* HAproxy UI: `http://192.168.86.62:8181`
+* Kafka UI: `http://192.168.86.62:8081`
+
+
 ## Setup Changefeed in CockroachDB
 
 ```sql
