@@ -1,0 +1,16 @@
+# CockroachDB Prometheus metrics
+[sources.from_crdb_api]
+type = "prometheus_scrape"
+endpoints = [ "http://crdb-lb:8080/_status/vars" ]
+scrape_interval_secs = 15
+instance_tag = "instance"
+endpoint_tag = "endpoint"
+
+# Preview metrics/logs in the console terminal
+[sinks.crdb_terminal]
+type = "console"
+inputs = [ "from_crdb_api" ]
+target = "stdout"
+
+  [sinks.crdb_terminal.encoding]
+  codec = "json"
