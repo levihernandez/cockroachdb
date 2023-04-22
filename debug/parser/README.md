@@ -16,8 +16,14 @@ pip install matplotlib pandas jupyterlab
 ```
 
 * Generate the debug bundle for the CockroachDB cluster and extract the zip file `nodes.json`
-```
-cockroach debug zip debug.zip --certs-dir=certs --host=<node-ip>:26257
 
 ```
+cockroach debug zip debug.zip --certs-dir=certs --host=<node-ip>:26257
+```
+
 * Validate the file location and Run the JupyterLab project
+
+```
+python crdb_debug_nodes-json.py
+```
+
