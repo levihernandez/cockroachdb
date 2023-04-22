@@ -27,3 +27,6 @@ cockroach debug zip debug.zip --certs-dir=certs --host=<node-ip>:26257
 python crdb_debug_nodes-json.py
 ```
 
+* Results
+
+![parser](parser.png)
