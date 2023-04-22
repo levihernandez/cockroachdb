@@ -23,8 +23,12 @@ cockroach debug zip debug.zip --certs-dir=certs --host=<node-ip>:26257
 
 * Validate the file location and Run the JupyterLab project
 
-```
+```shell
+# run the script to get images without Jupyter
 python crdb_debug_nodes-json.py
+
+# run Jupyter to see everything in a single page
+jupyter-lab
 ```
 
 * Results
